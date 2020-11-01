@@ -2,6 +2,7 @@ name: Docker-Image-BuildKit
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   docker-build:

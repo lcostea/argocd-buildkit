@@ -2,6 +2,7 @@ name: Docker-Image-Standard
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   docker-build:
