@@ -1,0 +1,28 @@
+name: Docker-Image-Standard
+
+on:
+  push:
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    env:
+      GOPATH: /home/runner/work/argo-cd/argo-cd
+    steps:
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.14.1'
+      - uses: actions/checkout@master
+        with:
+          path: src/github.com/argoproj/argo-cd
+
+      # get image tag
+      - run: echo ::set-output name=tag::$(cat ./VERSION)-${GITHUB_SHA::8}
+        working-directory: ./src/github.com/argoproj/argo-cd
+        id: image
+
+      # build
+      - run: |
+          make image DEV_IMAGE=true DOCKER_PUSH=false IMAGE_NAMESPACE=docker.pkg.github.com/argoproj/argo-cd IMAGE_TAG=${{ steps.image.outputs.tag }}
+        working-directory: ./src/github.com/argoproj/argo-cd
+          
